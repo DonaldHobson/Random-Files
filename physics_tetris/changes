@@ -1,0 +1,34 @@
+.screen to .window in config.lua
+(also .fsaa to  .msaa)
+
+
+require "foo.lua"
+to 
+require ("foo")
+
+
+love.graphics.getModes()
+to
+love.window.getFullscreenModes()
+
+
+love.audio.newSource( "sounds/boot.ogg")
+to 
+love.audio.newSource( "sounds/boot.ogg", "stream")
+
+
+return love.graphics.newImageFont(image, glyphs)
+to
+return love.graphics.newImageFont(filename, glyphs)
+
+reduced code block  newPaddedImageFont to triviality "return love.graphics.newImageFont(filename, glyphs)"
+
+
+wallshapes[1]=love.physics.newBody(world, 32, -64, 0, 0) --WALLS
+wallshapes[1]:setData({"right"})
+wallshapes[1]:setFriction(0.00001)
+to
+love.physics.newBody(world, 32, -64, "static") --WALLS
+wallfixtures[0] = love.physics.newFixture( wallbodies, wallshapes[0], 1 )
+    wallfixtures[0]:setUserData({"left"})
+	wallfixtures[0]:setFriction(0.00001)
