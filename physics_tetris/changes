@@ -32,3 +32,51 @@ love.physics.newBody(world, 32, -64, "static") --WALLS
 wallfixtures[0] = love.physics.newFixture( wallbodies, wallshapes[0], 1 )
     wallfixtures[0]:setUserData({"left"})
 	wallfixtures[0]:setFriction(0.00001)
+
+
+
+
+
+
+comments from reddit 
+
+comment replyLove2d NotTetris 2
+
+from istarian via /r/love2d sent 1 day ago
+
+
+Have been giving this a try (under Windows) with 11.4... Alas, nothing is simple.
+
+I do suggest you do this fix in main.lua (love.keypressed), though:
+
+elseif key == "escape" then  
+    --love.event.push("q")  
+    love.event.push("quit") -- Quit the game.  
+
+Without that change, you get a crash instead of a clean exit when you hit Escape.
+
+I have also established that there is a need to:
+
+CHANGE 'love.graphics.setMode( ... )' to love.window.setMode( ... )' and that the syntax thereof has changed to be the first two value and a table of "flags" for the other values.
+
+E.g.
+previous
+
+    love.window.setMode( 0, 0, true, vsync, 16 )
+    new
+    t_flags = {fullscreen=true, vsync=vsync_value, msaa=16} love.window.setMode( 0, 0, t_flags )
+
+You also have to convert from vsync being a boolean value to being 1 (enabled), 0 (disabled), or -1 (adaptive sync). Hence why I am passing vsync_value instead of the original vsync which was a boolean.
+
+CHANGE 'love.audio.resume( ... )' to 'love.audio.play( ... )' because the former has been removed from 11.0 onward.
+
+CHANGE the code for making a new World (physics related). This change allows at least the first block to show up. Unfortunately that's the only thing that happens as the next block still doesn't appear... Haven't figured out what the deal is yet, but I know very little about how the physics system/Box2D works...
+
+old
+
+    world = love.physics.newWorld(0, -720, 960, 1050, 0, 500, true)
+    TO
+    new
+    world = love.physics.newWorld(0, 500, true)
+
+
